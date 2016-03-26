@@ -1,11 +1,10 @@
 use v6;
 use Text::TFIdf;
-use Lingua::EN::Stopwords::Short;
 use Test;
 
 plan 4;
 
-my $doc-store = TFIdf.new(:trim(True), :stop-list(@stop-words));
+my $doc-store = TFIdf.new(:trim(True));
 
 $doc-store.add('perl is cool');
 $doc-store.add('i like node');
