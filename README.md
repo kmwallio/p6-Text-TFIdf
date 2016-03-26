@@ -1,6 +1,6 @@
 # Text::TFIdf
 
-Given a set of documents, generates [TF-IDF Vectors](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) for them.
+Given a set of documents, generates [TF-IDF Vectors](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) for them. [![Build Status](https://travis-ci.org/kmwallio/p6-Text-TFIdf.svg?branch=master)](https://travis-ci.org/kmwallio/p6-Text-TFIdf)
 
 ## Installation
 
