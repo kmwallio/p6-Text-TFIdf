@@ -13,3 +13,5 @@ sub results($id, $score) {
 }
 
 $doc-store.tfids('node perl java', &results);
+
+say $doc-store.tfids('node perl java');

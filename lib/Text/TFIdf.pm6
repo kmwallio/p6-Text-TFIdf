@@ -2,6 +2,9 @@ use v6;
 use Lingua::EN::Stem::Porter;
 
 module Text::TFIdf {
+  sub no-callback ($i, $j) {
+    return;
+  }
   class Document {
     has Str $.contents;
     has Bool $.trim = False;
@@ -103,7 +106,7 @@ module Text::TFIdf {
       return $score;
     }
 
-    method tfids(Str $doc, &callback)  is export {
+    method tfids(Str $doc, &callback = &no-callback)  is export {
       self!build();
 
       my @tfids;
