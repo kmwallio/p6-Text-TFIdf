@@ -68,7 +68,7 @@ module Text::TFIdf {
     method has-word($word) {
       self!build() unless ($!built);
 
-      my $w = ($.trim) ?? porter($word) !! $word;
+      my $w = ($.trim) ?? porter($word.lc) !! $word.lc;
       if (%!words{$w}:exists) {
         return 0.5 + (0.5 * (%!words{$w} / $!max));
       } else {
@@ -86,10 +86,6 @@ module Text::TFIdf {
     has Bool $.trim = False;
 
     method !build() {
-      if ($!built) {
-        return;
-      }
-
       $!built = True;
       my $docs = @!documents.elems;
       for %!vocab.keys() -> $key {
@@ -105,50 +101,43 @@ module Text::TFIdf {
       $!built = False;
 
       for $doc.split(/\s+|'!'|'.'|'?'/, :skip-empty) -> $w {
-        my $i = ($.trim) ?? porter($w) !! $w;
-        unless (%.stop-list{$w.lc}:exists) {
-          unless (%seen{$i}:exists) {
-            %!vocab{$i}++;
-            %seen{$i}++;
-          }
+        my $i = ($.trim) ?? porter($w.lc) !! $w.lc;
+        unless ((%.stop-list{$w.lc}:exists) || (%seen{$i}:exists)) {
+          %!vocab{$i}++;
+          %seen{$i} = 1;
         }
       }
     }
 
     method tfidf(Str $doc, Int $id) is export {
-      self!build();
+      self!build() unless ($!built);
 
       if ($id < 0 || $id > @!documents.elems) {
         return 0;
       }
 
       my %seen;
-      my $score = 0;
-      for $doc.split(/\s+|'!'|'.'|'?'/, :skip-empty) -> $w {
-        my $i = ($.trim) ?? porter($w) !! $w;
+      my $score = $doc.split(/\s+|'!'|'.'|'?'/, :skip-empty).map(-> $w {
+        my $i = ($.trim) ?? porter($w.lc) !! $w.lc;
         unless (%seen{$i}:exists) {
-          %seen{$i}++;
+          %seen{$i} = 1;
           my $idf = %!idfs{$i}:exists ?? %!idfs{$i} !! 0;
-          $score += @!documents[$id].has-word($w) * $idf;
+          @!documents[$id].has-word($w) * $idf;
         }
-      }
+      }).reduce(*+*);
 
       return $score;
     }
 
     method tfids(Str $doc, &callback = &no-callback)  is export {
-      self!build();
-
-      my @tfids;
+      self!build() unless ($!built);
 
       my $docs = @!documents.elems - 1;
-      for [0..$docs] -> $doc-id {
+      my @tfids = [0..$docs].map(-> $doc-id {
         my $res = self.tfidf($doc, $doc-id);
-        if (&callback) {
-          callback($doc-id, $res);
-        }
-        @tfids.push($res);
-      }
+        callback($doc-id, $res);
+        $res
+      });
 
       return @tfids;
     }
