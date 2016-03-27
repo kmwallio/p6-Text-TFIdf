@@ -14,9 +14,9 @@ $doc-store.add('perl and node are interesting meh about java');
 
 sub results($id, $score) {
   if ($id < 3) {
-    ok $score.floor == 0, "Docs with one matching term score 0";
+    ok $score < 1, "Docs with one matching term score 0";
   } else {
-    ok $score.floor == 1, "Doc with 3 matching terms score 1";
+    ok $score > 1, "Doc with 3 matching terms score 1";
   }
 }
 

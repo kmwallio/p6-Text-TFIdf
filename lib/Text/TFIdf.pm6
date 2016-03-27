@@ -59,8 +59,8 @@ module Text::TFIdf {
       $!built = True;
       my $docs = @!documents.elems;
       for %!vocab.keys() -> $key {
-        my $denom = %!vocab{$key};
-        %!idfs{$key} = log($docs / $denom);
+        my $denom = 1 + %!vocab{$key};
+        %!idfs{$key} = 1 + log($docs / $denom);
       }
     }
 
