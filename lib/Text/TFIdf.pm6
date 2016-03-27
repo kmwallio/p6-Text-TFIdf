@@ -119,7 +119,7 @@ module Text::TFIdf {
       my %seen;
       my $score = $doc.split(/\s+|'!'|'.'|'?'/, :skip-empty).map(-> $w {
         my $i = ($.trim) ?? porter($w.lc) !! $w.lc;
-        unless (%seen{$i}:exists) {
+        unless ((%.stop-list{$w.lc}:exists) || (%seen{$i}:exists)) {
           %seen{$i} = 1;
           my $idf = %!idfs{$i}:exists ?? %!idfs{$i} !! 0;
           @!documents[$id].has-word($w) * $idf;
