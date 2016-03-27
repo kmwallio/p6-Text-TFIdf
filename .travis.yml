@@ -4,3 +4,4 @@ perl6:
 install:
     - rakudobrew build-panda
     - panda installdeps .
+    - panda install Lingua::EN::Stopwords

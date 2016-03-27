@@ -13,8 +13,9 @@ panda install git://github.com/kmwallio/p6-Text-TFIdf.git
 ``` perl6
 use Text::TFIdf;
 
-my @stop-words = [...]; # list stop words here...
-my $doc-store = TFIdf.new(:trim(True), :stop-list(@stop-words));
+my %stop-words;
+
+my $doc-store = TFIdf.new(:trim(True), :stop-list(%stop-words));
 
 $doc-store.add('perl is cool');
 $doc-store.add('i like node');

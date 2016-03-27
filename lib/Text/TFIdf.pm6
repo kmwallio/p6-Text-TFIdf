@@ -48,12 +48,8 @@ module Text::TFIdf {
     has %!vocab;
     has %!idfs;
     has Bool $!built = False;
-    has @.stop-list;
+    has %.stop-list;
     has Bool $.trim = False;
-
-    method has-stop(Str $word) {
-      return @.stop-list.grep(/:i^$word$/).elems == 1;
-    }
 
     method !build() {
       if ($!built) {
@@ -76,7 +72,7 @@ module Text::TFIdf {
 
       for $doc.split(/\s+|'!'|'.'|'?'/, :skip-empty) -> $w {
         my $i = ($.trim) ?? porter($w) !! $w;
-        unless (self.has-stop($w)) {
+        unless (%.stop-list{$w.lc}:exists) {
           unless (%seen{$i}:exists) {
             %!vocab{$i}++;
             %seen{$i}++;
