@@ -1,6 +1,40 @@
 use v6;
 use Lingua::EN::Stem::Porter;
 
+=begin pod
+
+=head1 NAME
+
+Text::TFIdf
+
+=head1 DESCRIPTION
+
+Text::TFIdf assists in calulating TF-IDF vectors and scores for a collection of documents.
+
+=head2 Examples
+
+    use Text::TFIdf;
+    use Lingua::EN::Stopwords::Short;
+
+    my $doc-store = TFIdf.new(:trim(True), :stop-list(%stop-words));
+
+    $doc-store.add('perl is cool');
+    $doc-store.add('i like node');
+    $doc-store.add('java is okay');
+    $doc-store.add('perl and node are interesting meh about java');
+
+    sub results($id, $score) {
+      say $id ~ " got " ~ $score;
+    }
+
+    $doc-store.tfids('node perl java', &results);
+
+    say $doc-store.tfids('node perl java');
+
+This example will print out a numbers that represent how similar the given document is to documents in the corpus.
+
+=end pod
+
 module Text::TFIdf {
   sub no-callback ($i, $j) {
     return;
