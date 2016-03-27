@@ -1,8 +1,9 @@
 use Text::TFIdf;
-use Lingua::EN::Stopwords::Short;
 use Test;
 
 plan 4;
+my %stop-words;
+('the', 'like', 'is', 'and', 'are').map(-> $w { %stop-words{$w}++ } );
 
 my $doc-store = TFIdf.new(:trim(True), :stop-list(%stop-words));
 
