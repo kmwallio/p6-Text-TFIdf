@@ -5,7 +5,7 @@ Given a set of documents, generates [TF-IDF Vectors](https://en.wikipedia.org/wi
 ## Installation
 
 ```
-panda install git://github.com/kmwallio/p6-Text-TFIdf.git
+panda install Text::TFIdf
 ```
 
 ## Usage
